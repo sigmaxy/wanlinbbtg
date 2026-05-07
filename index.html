@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>預約行事曆</title>
+    <title>预约行事历</title>
     <!-- 引入 Telegram Web App JS SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
-            /* 使用 Telegram 主題顏色作為備用，優先使用 Tailwind 的顏色 */
+            /* 使用 Telegram 主题颜色作为备用，优先使用 Tailwind 的颜色 */
             background-color: var(--tg-theme-bg-color, #ffffff);
             color: var(--tg-theme-text-color, #000000);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -31,7 +31,7 @@
             flex-grow: 1;
             width: 100%;
             position: relative;
-            /* 讓 iframe 佔滿剩餘空間 */
+            /* 让 iframe 占满剩余空间 */
             overflow: hidden; 
         }
 
@@ -44,7 +44,7 @@
             border: 0;
         }
 
-        /* 簡單的載入動畫 */
+        /* 简单的加载动画 */
         .loader {
             border: 4px solid #f3f3f3;
             border-top: 4px solid var(--tg-theme-button-color, #3498db);
@@ -68,44 +68,46 @@
 <body>
 
     <div class="header">
-        <h1 class="text-xl font-bold">查看我的空閒時間</h1>
-        <p class="text-sm opacity-75 mt-1" id="user-greeting">請查看下方日曆</p>
+        <h1 class="text-xl font-bold">查看我的空闲时间</h1>
+        <p class="text-sm opacity-75 mt-1" id="user-greeting">请查看下方日历</p>
     </div>
 
     <div class="calendar-container">
-        <!-- 載入動畫，當 iframe 載入完成後會被遮蓋 -->
+        <!-- 加载动画，当 iframe 加载完成后会被遮盖 -->
         <div class="loader"></div>
         
         <!-- 
-          請將下方 src 替換成你 Google Calendar 設定中的「內嵌網址」
-          建議加上參數 mode=WEEK 來預設顯示週視圖，更適合查看時段
+          请将下方 src 替换成你 Google Calendar 设置中的「内嵌网址」
+          建议加上参数 mode=WEEK 来预设显示周视图，更适合查看时段
         -->
-        <iframe src="https://calendar.google.com/calendar/embed?src=9d0aceafb69e3442345da77a4555dc36aea4ec9ca4770ed9ee3ee961592dd55e%40group.calendar.google.com&ctz=Asia%2FHong_Kong" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
-
+        <iframe 
+            src="https://calendar.google.com/calendar/embed?height=600&wkst=1&bgcolor=%23ffffff&ctz=Asia%2FTaipei&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=1&showCalendars=0&showTz=0&mode=WEEK&src=YOUR_CALENDAR_ID_HERE%40group.calendar.google.com" 
+            onload="document.querySelector('.loader').style.display='none';"
+        ></iframe>
     </div>
 
     <script>
         // 初始化 Telegram Web App
         const tg = window.Telegram.WebApp;
 
-        // 通知 Telegram 應用程式 Web App 已準備就緒
+        // 通知 Telegram 应用程序 Web App 已准备就绪
         tg.ready();
 
-        // 展開 Web App 到全螢幕高度 (可選，但建議)
+        // 展开 Web App 到全屏幕高度 (可选，但建议)
         tg.expand();
 
-        // 嘗試獲取使用者名稱來打招呼
+        // 尝试获取用户名称来打招呼
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             const userName = tg.initDataUnsafe.user.first_name;
-            document.getElementById('user-greeting').textContent = `嗨，${userName}！請查看空閒時段`;
+            document.getElementById('user-greeting').textContent = `嗨，${userName}！请查看空闲时段`;
         }
 
-        // 設定 Telegram 主按鈕 (可選：如果想讓使用者選完後點擊確認)
+        // 设置 Telegram 主按钮 (可选：如果想让用户选完后点击确认)
         /*
-        tg.MainButton.text = "我已確認空閒時間";
+        tg.MainButton.text = "我已确认空闲时间";
         tg.MainButton.show();
         tg.MainButton.onClick(() => {
-            // 在這裡可以發送資料回 Bot 或關閉 Web App
+            // 在这里可以发送数据回 Bot 或关闭 Web App
             // tg.sendData("checked_calendar"); 
             tg.close();
         });
